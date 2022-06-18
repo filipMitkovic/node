@@ -12,8 +12,13 @@ const schema = Joi.object().keys({
 })
 
 router.get('/', async (req: Request, res: Response) => {
-    let proizvodjaci = await db.Proizvodjac.findAll()
+    let proizvodjaci = await db.Proizvodjac.findAll({ include: 'modeli' })
     res.json(proizvodjaci)
+})
+
+router.get('/:id', async (req: Request, res: Response) => {
+    let proizvodjac = await db.Proizvodjac.findOne({ where: {id: req.params.id}, include: 'modeli' })
+    res.json(proizvodjac)
 })
 
 router.post('/', async (req: Request, res: Response) => {

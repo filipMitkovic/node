@@ -7,13 +7,8 @@ const connect = async () => {
         host: 'localhost',
         dialect: 'mysql'
     })
+    
     initData(db.sequelize)
-    try {
-        await db.sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
 }
 
 
@@ -88,17 +83,71 @@ const initData = async (sequelize: Sequelize) => {
         }
     }, { tableName: 'usluge', timestamps: false })
 
+    db.Vozilo = db.sequelize.define('Vozilo', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        tip_goriva: {
+            type: DataTypes.ENUM('BENZIN', 'DIZEL')
+        },
+        tip_menjaca: {
+            type: DataTypes.ENUM('5', '6', 'AUTOMATIK')
+        },
+        broj_registracije: {
+            type: DataTypes.INTEGER
+        },
+        broj_sasije: {
+            type: DataTypes.INTEGER
+        },
+        broj_motora: {
+            type: DataTypes.INTEGER
+        },
+        boja: {
+            type: DataTypes.STRING
+        }
+    }, { tableName: 'vozila', timestamps: false })
+
+    db.PruzenaUsluga = db.sequelize.define('PruzenaUsluga', {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        cena: {
+            type: DataTypes.DOUBLE
+        }
+    }, { tableName: 'pruzene_usluge', timestamps: false })
+
 
 
     // Associations
-    db.Proizvodjac.hasMany(db.Model);
     db.Model.belongsTo(db.Proizvodjac);
+    db.Proizvodjac.hasMany(db.Model, {as: 'modeli'});
+
+    db.Vozilo.belongsTo(db.Model)
+    db.Model.hasMany(db.Vozilo, {as: 'vozila'})
+
+    db.Vozilo.belongsTo(db.Korisnik)
+    db.Korisnik.hasMany(db.Vozilo, {as: 'vozila'})
+    
+    db.PruzenaUsluga.belongsTo(db.Usluga)
+    db.Usluga.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
+    db.PruzenaUsluga.belongsTo(db.Korisnik)
+    db.Korisnik.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
+    db.PruzenaUsluga.belongsTo(db.Vozilo)
+    db.Vozilo.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
+
+
 
     await db.User.sync();
     await db.Korisnik.sync();
     await db.Proizvodjac.sync();
     await db.Model.sync();
     await db.Usluga.sync();
+    await db.Vozilo.sync();
+    await db.PruzenaUsluga.sync();
 }
 
 db.Sequelize = Sequelize;

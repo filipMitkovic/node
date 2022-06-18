@@ -1,5 +1,6 @@
 import { sign, verify } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
+import { User } from '../model';
 
 export function generateToken(user: any) {
 
@@ -24,7 +25,7 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
     
         // verify token
         const decodedToken = verify(jwt, 'SECRET_KEY');
-        req.body.user = decodedToken
+        req.user = decodedToken as User
     
         next();
 
