@@ -17,6 +17,7 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
         if (!jwt) {
           return res.status(401).json({ message: 'Invalid token ' });
         }
+
     
         // remove Bearer if using Bearer Authorization mechanism
         if (jwt.toLowerCase().startsWith('bearer')) {

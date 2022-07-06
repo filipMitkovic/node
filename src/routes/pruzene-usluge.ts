@@ -13,8 +13,16 @@ const schema = Joi.object().keys({
 })
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    let usluge = await db.PruzenaUsluga.findAll();
-    res.json(usluge);
+    try {
+        let usluge = await db.PruzenaUsluga.findAll({ include: [
+            {model: db.Usluga, as: 'usluga'}, 
+            {model: db.Vozilo, as: 'vozilo', include: [{ model: db.Model, as: 'model', include: 'proizvodjac'}, {model: db.Korisnik, as: 'korisnik'}]}
+        ] });
+        res.status(200).json(usluge);
+    } catch (e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
 })
 
 export default router

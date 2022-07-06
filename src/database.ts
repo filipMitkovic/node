@@ -117,37 +117,38 @@ const initData = async (sequelize: Sequelize) => {
         },
         cena: {
             type: DataTypes.DOUBLE
+        },
+        placeno: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     }, { tableName: 'pruzene_usluge', timestamps: false })
 
 
 
     // Associations
-    db.Model.belongsTo(db.Proizvodjac);
+    db.Model.belongsTo(db.Proizvodjac, {as: 'proizvodjac'});
     db.Proizvodjac.hasMany(db.Model, {as: 'modeli'});
 
-    db.Vozilo.belongsTo(db.Model)
+    db.Vozilo.belongsTo(db.Model, {as: 'model'})
     db.Model.hasMany(db.Vozilo, {as: 'vozila'})
 
-    db.Vozilo.belongsTo(db.Korisnik)
+    db.Vozilo.belongsTo(db.Korisnik, {as: 'korisnik'})
     db.Korisnik.hasMany(db.Vozilo, {as: 'vozila'})
     
-    db.PruzenaUsluga.belongsTo(db.Usluga)
-    db.Usluga.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
-    db.PruzenaUsluga.belongsTo(db.Korisnik)
-    db.Korisnik.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
-    db.PruzenaUsluga.belongsTo(db.Vozilo)
-    db.Vozilo.hasMany(db.PruzenaUsluga, {as: 'pruzene_usluge'})
+    db.PruzenaUsluga.belongsTo(db.Usluga, { as: 'usluga', foreignKey: 'uslugaId'})
+    db.Usluga.hasMany(db.PruzenaUsluga, { foreignKey: 'uslugaId' })
+
+    db.PruzenaUsluga.belongsTo(db.Vozilo, { as: 'vozilo', foreignKey: 'voziloId' })
+    db.Vozilo.hasMany(db.PruzenaUsluga, { foreignKey: 'voziloId' })
 
 
 
-    await db.User.sync();
-    await db.Korisnik.sync();
-    await db.Proizvodjac.sync();
-    await db.Model.sync();
-    await db.Usluga.sync();
-    await db.Vozilo.sync();
-    await db.PruzenaUsluga.sync();
+    try {
+        await sequelize.sync()
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 db.Sequelize = Sequelize;

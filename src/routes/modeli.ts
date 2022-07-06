@@ -10,12 +10,12 @@ router.use(validateToken)
 
 const schema = Joi.object().keys({
     name: Joi.string().min(1).required(),
-    ProizvodjacId: Joi.number().required()
+    proizvodjacId: Joi.number().required()
 })
 
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    let modeli = await db.Model.findAll();
+    let modeli = await db.Model.findAll({ include: 'proizvodjac' });
     res.json(modeli);
 })
 
@@ -32,11 +32,13 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const validation = schema.validate(req.body);
     if (validation.error) {
-        res.send(validation.error.message)
+        res.status(400).send(validation.error.message)
         return
     }
-    const toSave = req.body as Model;
-    let model = await db.Model.create(toSave);
+    let model = await db.Model.create({
+        name: req.body.name,
+        ProizvodjacId: req.body.proizvodjacId
+    });
     res.json(model);
 })
 

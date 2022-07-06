@@ -23,15 +23,15 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let user = await db.User.findOne({ where: {email: loginReq.email} })
         if (user == null) {
-            res.send('User not found');
+            res.status(404).send('User not found');
             return;
         }
         if (user.password != loginReq.password) {
-            res.send('Bad credentials!')
+            res.status(401).send('Bad credentials!')
             return
         }
         const token = generateToken(user);
-        res.send(token)
+        res.send({id: user.id, jwt: token})
     } catch (error) {
         console.log(error)
         return
