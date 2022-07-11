@@ -29,9 +29,9 @@ router.post('/', async (req: Request, res: Response) => {
         res.status(400).send(validation.error.message)
         return
     }
-    let korisnik = await db.Usluga.create({
+    let korisnik = await db.Korisnik.create({
         first_name: req.body.first_name, 
-        last_name: req.body.cena,
+        last_name: req.body.last_name,
         phone: req.body.phone
     })
     res.status(200).json(korisnik)
@@ -56,8 +56,6 @@ router.delete('/:id', async (req: Request, res: Response) => {
     await db.Korisnik.destroy({where: {id: req.params.id}})
     res.json('Deleted.')
 })
-
-
 
 
 

@@ -2,7 +2,6 @@ import express, { Router, Request, Response, NextFunction } from 'express'
 import db from '../database';
 import { validateToken } from '../utils/jwt';
 import Joi from 'joi'
-import { Model } from '../model'
 
 const router: Router = Router();
 
@@ -22,6 +21,19 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     let model = await db.Model.findOne({ where: {id: req.params.id} })
     res.json(model);
+})
+
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const validation = schema.validate(req.body);
+    if (validation.error) {
+        res.status(400).send(validation.error.message)
+        return
+    }
+    let model = await db.Model.findOne({ where: {id: req.params.id} })
+    model.name = req.body.name
+    model.ProizvodjacId = req.body.proizvodjacId
+    model.save()
+    res.status(200).json(model)
 })
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {

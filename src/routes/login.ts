@@ -16,7 +16,7 @@ const schema = Joi.object().keys({
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const validation = schema.validate(req.body);
     if (validation.error) {
-        res.send(validation.error.message)
+        res.status(400).send(validation.error.message)
         return
     }
     const loginReq = req.body as LoginRequest

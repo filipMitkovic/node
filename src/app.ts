@@ -7,6 +7,7 @@ import modeli from './routes/modeli'
 import pruzeneUsluge from './routes/pruzene-usluge'
 import usluge from './routes/usluge'
 import korisnici from './routes/korisnici'
+import vozila from './routes/vozila'
 import db from './database';
 const port = 8000;
 
@@ -22,6 +23,7 @@ app.use('/modeli', modeli)
 app.use('/pruzene-usluge', pruzeneUsluge)
 app.use('/usluge', usluge)
 app.use('/korisnici', korisnici)
+app.use('/vozila', vozila)
 
 
 app.get('/', (req: Request, res: Response) => {
