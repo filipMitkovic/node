@@ -31,7 +31,7 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     }
     let model = await db.Model.findOne({ where: {id: req.params.id} })
     model.name = req.body.name
-    model.ProizvodjacId = req.body.proizvodjacId
+    model.proizvodjacId = req.body.proizvodjacId
     model.save()
     res.status(200).json(model)
 })
@@ -49,7 +49,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     }
     let model = await db.Model.create({
         name: req.body.name,
-        ProizvodjacId: req.body.proizvodjacId
+        proizvodjacId: req.body.proizvodjacId
     });
     res.json(model);
 })
