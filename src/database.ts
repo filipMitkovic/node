@@ -139,8 +139,8 @@ const initData = async (sequelize: Sequelize) => {
     db.PruzenaUsluga.belongsTo(db.Usluga, { as: 'usluga', foreignKey: 'uslugaId', onDelete: 'cascade', hooks: true })
     db.Usluga.hasMany(db.PruzenaUsluga, { as: 'pruzeneUsluge', foreignKey: 'uslugaId'})
 
-    db.PruzenaUsluga.belongsTo(db.Vozilo, { as: 'vozilo', foreignKey: 'voziloId' })
-    db.Vozilo.hasMany(db.PruzenaUsluga, { as: 'pruzeneUsluge', foreignKey: 'voziloId', onDelete: 'cascade', hooks: true })
+    db.PruzenaUsluga.belongsTo(db.Vozilo, { as: 'vozilo', foreignKey: 'voziloId', onDelete: 'cascade', hooks: true })
+    db.Vozilo.hasMany(db.PruzenaUsluga, { as: 'pruzeneUsluge', foreignKey: 'voziloId'})
 
 
 

@@ -9,9 +9,12 @@ import usluge from './routes/usluge'
 import korisnici from './routes/korisnici'
 import vozila from './routes/vozila'
 import db from './database';
+import path from 'path';
 const port = 8000;
 
 const app: Application = express();
+
+//app.use(express.static(path.join(__dirname,"..","build")))
 
 app.use(express.json())
 app.use(cors())
@@ -27,7 +30,7 @@ app.use('/vozila', vozila)
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hello');
+    res.send("Hello");
 })
 
 db.connect()
