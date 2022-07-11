@@ -14,7 +14,7 @@ const port = 8000;
 
 const app: Application = express();
 
-//app.use(express.static(path.join(__dirname,"..","build")))
+app.use(express.static(path.join(__dirname,"..","build")))
 
 app.use(express.json())
 app.use(cors())

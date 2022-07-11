@@ -1,0 +1,35 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const login_1 = __importDefault(require("./routes/login"));
+const users_1 = __importDefault(require("./routes/users"));
+const proizvodjaci_1 = __importDefault(require("./routes/proizvodjaci"));
+const modeli_1 = __importDefault(require("./routes/modeli"));
+const pruzene_usluge_1 = __importDefault(require("./routes/pruzene-usluge"));
+const usluge_1 = __importDefault(require("./routes/usluge"));
+const korisnici_1 = __importDefault(require("./routes/korisnici"));
+const vozila_1 = __importDefault(require("./routes/vozila"));
+const database_1 = __importDefault(require("./database"));
+const path_1 = __importDefault(require("path"));
+const port = 8000;
+const app = (0, express_1.default)();
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "build")));
+app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.use('/login', login_1.default);
+app.use('/users', users_1.default);
+app.use('/proizvodjaci', proizvodjaci_1.default);
+app.use('/modeli', modeli_1.default);
+app.use('/pruzene-usluge', pruzene_usluge_1.default);
+app.use('/usluge', usluge_1.default);
+app.use('/korisnici', korisnici_1.default);
+app.use('/vozila', vozila_1.default);
+app.get('/', (req, res) => {
+    res.send("Hello");
+});
+database_1.default.connect();
+app.listen(port, () => console.log(`Server running on port ${port}`));
